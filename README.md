@@ -18,6 +18,16 @@ A full-stack e-commerce platform built on the PERN stack (PostgreSQL, Express, R
 | --- | --- | --- |
 | ![Catalog](docs/screenshots/catalog.png) | ![Product page](docs/screenshots/product.png) | ![Admin dashboard](docs/screenshots/admin.png) |
 
+### Try the admin dashboard
+
+Sign in on the live site with the demo admin account to explore the product manager at `/admin`:
+
+| Email | Password |
+| --- | --- |
+| `admin@northwind.test` | `NorthwindDemo2026!` |
+
+To try the customer experience instead, create your own account from **Sign in > Create an account**.
+
 ---
 
 ## Features
@@ -125,11 +135,11 @@ flowchart LR
 git clone https://github.com/sizwendlovu01/NorthWind-Store.git
 cd NorthWind-Store
 npm run setup                           # install root, backend and frontend dependencies
-cp backend/.env.example backend/.env    # then set JWT_SECRET and SEED_ADMIN_PASSWORD
+cp backend/.env.example backend/.env    # then set JWT_SECRET
 npm run dev                             # Postgres :5433, API :3001, web app :5173
 ```
 
-Open http://localhost:5173 and sign in with the admin email and password from `backend/.env`, or create an account at `/sign-up`.
+Open http://localhost:5173 and sign in with the demo admin account above (set by `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` in `backend/.env`), or create an account at `/sign-up`.
 
 Useful scripts:
 
@@ -151,7 +161,7 @@ The repository deploys as **one** Vercel project; all build settings come from [
 
 1. Create a free Postgres database on [Neon](https://neon.tech) and copy its pooled connection string.
 2. In Vercel, import this repository. Leave the root directory and build settings at their defaults.
-3. Add environment variables: `DATABASE_URL`, `JWT_SECRET` (32+ random characters), `SEED_ADMIN_EMAIL` and `SEED_ADMIN_PASSWORD`. Integration keys are optional.
+3. Add environment variables: `DATABASE_URL` (pooled), `DATABASE_URL_UNPOOLED` (direct, used for migrations), `JWT_SECRET` (32+ random characters), and `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` set to the demo admin login above. Integration keys are optional.
 4. Deploy. The build applies migrations, seeds the catalog on first deploy and publishes the frontend and API together. Every push to `main` redeploys.
 
 For payments, point the Polar webhook at `https://<your-domain>/webhooks/polar`.
@@ -164,7 +174,8 @@ Backend (`backend/.env` locally, Vercel project settings in production):
 
 | Variable | Required | Purpose |
 | --- | --- | --- |
-| `DATABASE_URL` | Yes | PostgreSQL connection string |
+| `DATABASE_URL` | Yes | PostgreSQL connection string (pooled on Neon) |
+| `DATABASE_URL_UNPOOLED` | No | Direct connection used for migrations; falls back to `DATABASE_URL` |
 | `JWT_SECRET` | Yes | Secret for signing session tokens (32+ characters) |
 | `JWT_EXPIRES_IN` | No | Session length, default `7d` |
 | `SEED_ADMIN_EMAIL`, `SEED_ADMIN_PASSWORD` | No | Admin account created by the seed step |
