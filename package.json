@@ -1,0 +1,15 @@
+{
+  "name": "northwind",
+  "private": true,
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "setup": "npm install && npm --prefix backend install && npm --prefix frontend install",
+    "dev": "concurrently --kill-others-on-fail -n db,api,web -c magenta,cyan,green \"npm --prefix backend run db:start\" \"npm --prefix backend run dev\" \"npm --prefix frontend run dev\"",
+    "build": "npm --prefix backend run db:migrate && npm --prefix frontend run build"
+  },
+  "devDependencies": {
+    "concurrently": "10.0.6"
+  }
+}
