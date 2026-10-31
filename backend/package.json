@@ -12,7 +12,7 @@
     "db:start": "tsx scripts/db.mts",
     "db:studio": "drizzle-kit studio",
     "user:role": "tsx scripts/set-role.ts",
-    "db:migrate": "tsx scripts/migrate.ts",
+    "db:migrate": "tsx scripts/migrate.mts",
     "db:generate": "drizzle-kit generate"
   },
   "keywords": [],

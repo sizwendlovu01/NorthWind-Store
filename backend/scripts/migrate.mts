@@ -5,9 +5,13 @@
 import "dotenv/config";
 import { spawnSync } from "node:child_process";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import pg from "pg";
+
+// explicit ES module (.mts) so it runs the same whether Node or tsx strips the types
+const backendDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 function fail(message: string): never {
   console.error(`\n[migrate] ${message}\n`);
@@ -18,7 +22,7 @@ function runSeed(args: string[] = []) {
   const result = spawnSync("npx", ["tsx", "scripts/seed.ts", ...args], {
     stdio: "inherit",
     shell: true,
-    cwd: path.resolve(__dirname, ".."),
+    cwd: backendDir,
   });
   if (result.status !== 0) fail("Seeding failed");
 }
@@ -40,7 +44,7 @@ async function main() {
   const db = drizzle(pool);
 
   console.log("[migrate] Applying migrations");
-  await migrate(db, { migrationsFolder: path.resolve(__dirname, "..", "drizzle") });
+  await migrate(db, { migrationsFolder: path.join(backendDir, "drizzle") });
 
   const { rows } = await pool.query<{ n: number }>("SELECT count(*)::int AS n FROM products");
   const adminEmail = process.env.SEED_ADMIN_EMAIL?.trim().toLowerCase();
