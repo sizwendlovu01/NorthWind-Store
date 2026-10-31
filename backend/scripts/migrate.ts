@@ -35,7 +35,8 @@ async function main() {
     fail("JWT_SECRET must be set to a random string of at least 32 characters.");
   }
 
-  const pool = new pg.Pool({ connectionString: databaseUrl });
+  // migrations need a direct (non-pooled) connection; Neon provides it as DATABASE_URL_UNPOOLED
+  const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL_UNPOOLED || databaseUrl });
   const db = drizzle(pool);
 
   console.log("[migrate] Applying migrations");

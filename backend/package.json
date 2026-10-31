@@ -23,6 +23,7 @@
     "@imagekit/nodejs": "^7.4.0",
     "@sentry/node": "^10.48.0",
     "@sentry/profiling-node": "^10.48.0",
+    "@vercel/functions": "3.10.1",
     "bcryptjs": "3.0.3",
     "cors": "^2.8.5",
     "cron": "^4.4.0",

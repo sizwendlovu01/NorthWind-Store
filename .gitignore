@@ -30,3 +30,4 @@ dist-ssr
 
 # Vercel CLI local state
 .vercel
+.neon
